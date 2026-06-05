@@ -41,11 +41,17 @@ Use the built-in **Explore** agent for cheap read-only recon before building.
 - **Tokens** in memory / HttpOnly cookies — **never `localStorage`**. Never `dangerouslySetInnerHTML` without DOMPurify. No secrets in `VITE_` vars.
 - **Accessibility built-in**: semantic HTML, labels, keyboard operability, visible focus, AA contrast.
 - **API types are generated** from the backend OpenAPI spec — never hand-write a shape the spec owns; client validation is UX, the backend re-validates.
+- **Never swallow an error**: every API failure renders a visible state (enforced by the no-empty-catch / no-floating-promise lint rules + an "error is surfaced" test). Requests carry a `traceparent`; show the returned `traceId` on errors.
+- **Consumer Pact tests** + generated client = behavior + shape in sync. Realtime channels follow `realtime-contract`. Ship risky work behind a **feature flag**.
 
 ## Working principles
 Plan non-trivial work first. Close every task with `npm run validate` (typecheck + lint + test)
-evidence — never "done" on a red gate. Run `frontend-reviewer` (+ `accessibility-auditor` /
+evidence **and a `/redeploy --frontend` local smoke** (UI serves, deep-link falls back, reaches the
+Prism contract mock) — never "done" on a red gate or an unrun stack. Keep `frontend/compose.yaml` and
+the root `compose.yaml` in sync. Run `frontend-reviewer` (+ `accessibility-auditor` /
 `frontend-security-auditor` as relevant) before merge. Test behavior, not implementation. Smallest
 correct diff.
+**Commit & push policy:** finalize → local commit always; never push to a git remote or Docker Hub
+without an exact instruction (then ask git/Docker/both) — see root `CLAUDE.md` / `git-workflow`.
 
 If you add an agent/skill, update the tables above.

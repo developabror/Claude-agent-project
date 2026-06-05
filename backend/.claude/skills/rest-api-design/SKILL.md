@@ -14,7 +14,7 @@ Read this before adding or changing any endpoint.
    `GET /api/v1/orders`, `POST /api/v1/orders`, `GET /api/v1/orders/{id}/items`.
 2. **DTOs are records, separate from entities, always.** Never serialize a JPA entity. Map at the boundary.
 3. **`@Valid` every inbound body.** Validation lives on the DTO via Jakarta Bean Validation annotations.
-4. **One error envelope: RFC 9457 `ProblemDetail`** (`application/problem+json`). Never a bespoke wrapper, never an empty body, always a human-readable `message`.
+4. **One error envelope: RFC 9457 `ProblemDetail`** (`application/problem+json`). Never a bespoke wrapper, never an empty body, always a human-readable **`detail`** (the RFC 9457 field — the client reads `detail`, not `message`).
 5. **Pagination is capped.** Default `size=20`, hard max `100`. List responses carry paging metadata.
 
 ## Status codes (use exactly these)
@@ -112,3 +112,19 @@ class OrderController {
 
 ## MUST NOT
 - Return entities, expose internal IDs/stack traces, break a published `/api/v1` shape without versioning, or return an error without a message.
+
+## One ErrorCode catalog + traceId
+- Define a single backend `ErrorCode` enum (the catalog) and set it on every `ProblemDetail` (`errorCode`). Expose it in the OpenAPI schema so the frontend generates and `switch`es on the same codes — no magic strings on either side (see `api-contract`).
+- Include the request **`traceId`** as a `ProblemDetail` property (non-prod) + a response header so a user-reported error maps to exact logs (see `observability`).
+- Behavior, not just shape, is contract-tested via **Pact** (see `contract-testing`); the async surface has its own contract (`realtime-contract`).
+
+## Declare each endpoint's audience (`x-audience`)
+Every operation declares **who it's for** via the OpenAPI extension `x-audience`:
+`frontend` · `external` (third-party servers) · `internal` (service-to-service) · `webhook` (inbound) · `admin`.
+This is a **design decision set here, not inferred** — it drives FE coverage (only `frontend` endpoints
+must be consumed by the SPA) and the extra rigor non-`frontend` endpoints need (versioning, client-creds
+auth, rate-limit, signature verification). See the `api-coverage` skill; audit with `/api-coverage`.
+```yaml
+get: { operationId: listOrders, x-audience: [frontend] }
+post: { operationId: paymentWebhook, x-audience: [webhook] }
+```

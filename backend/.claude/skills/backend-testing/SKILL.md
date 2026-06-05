@@ -56,3 +56,14 @@ containers locally; enable `.withReuse(true)` locally to keep it fast.
 - `./gradlew test` for unit+slice; `./gradlew integrationTest` (or tagged `@Tag("integration")`) for container tests.
 - Gate coverage (JaCoCo) on changed code; report **only failures** + the summary to keep context lean.
 - Reproduce reported bugs with a failing test **first**, then fix.
+
+## Property / invariant tests (catch what example tests miss)
+For rules that must hold for *all* inputs (ordering, idempotency, no-overlap, totals), add
+**property-based tests** (jqwik): generate many inputs and assert the invariant, instead of a few
+hand-picked cases. Pair every DB constraint (see `jpa-patterns`) with a test that the violating case is
+**rejected** — that's how "it should never happen" stops happening.
+
+## Provider contract verification (Pact)
+Run **Pact provider verification** (see `contract-testing`) in the suite: replay the frontend's consumer
+contract against the running app (states seeded via Testcontainers) so a change that breaks a *consumed*
+endpoint fails the **backend** build — before it reaches the frontend. Codegen checks shape; Pact checks behavior.

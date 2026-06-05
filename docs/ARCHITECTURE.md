@@ -82,9 +82,9 @@ CLAUDE.md instructions are followed ~70% of the time; **hooks are deterministic 
 template wires safe, best-effort hooks per side (see `.claude/hooks/` and the `hooks` block in each
 `settings.json`): a **PreToolUse** guard that blocks clearly-destructive Bash, a best-effort
 **PostToolUse** formatter on edits, and a **SessionStart** banner announcing which team is active.
-Heavier gates (a `Stop` hook that blocks turn-end until tests pass) are provided but **disabled by
-default** — enable them once your suite is fast and stable. Hooks are cwd-only, so each side carries
-its own.
+A heavier gate (a `Stop` hook that blocks turn-end until tests pass) is **described as an opt-in
+pattern but intentionally not wired** — add it to a side's `settings.json` once your suite is fast and
+stable. Hooks are cwd-only, so each side carries its own.
 
 ## 8. Version notes (mid-2026)
 - Subagent/skill walk-up + on-demand descendant loading: current behavior; **restart Claude after

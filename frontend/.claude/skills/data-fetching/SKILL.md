@@ -11,7 +11,9 @@ TanStack Query owns **all** server state. Components consume hooks; they never c
 ```ts
 // src/lib/api-client.ts
 import axios from "axios";
-export const api = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL, withCredentials: true });
+// baseURL comes from RUNTIME config (window.__ENV__, injected at container start), defaulting to the
+// same-origin "/api" path that nginx proxies to the backend — NOT a baked VITE_ var (see vite-build).
+export const api = axios.create({ baseURL: window.__ENV__?.API_BASE_URL ?? "/api", withCredentials: true });
 
 api.interceptors.request.use((cfg) => {
   const token = getAccessToken();            // from memory, NOT localStorage
@@ -34,7 +36,13 @@ api.interceptors.response.use(undefined, async (error) => {
 ```
 
 - **Tokens** live in memory or HttpOnly+Secure+SameSite cookies — **never `localStorage`** (XSS theft).
-- `toApiError` unwraps the backend RFC 9457 `ProblemDetail` — the standard fields are `title`, `status`, `detail` (the human-readable text) plus custom properties `errorCode` and `violations`. Map `detail`/`violations` into a typed error the UI can render — never swallow it. (Note: the field is `detail`, not `message`.)
+- `toApiError` unwraps the backend RFC 9457 `ProblemDetail` (fields `title`, `status`, `detail` = the human-readable text, plus custom `errorCode`/`violations`) into the **one** UI error type — the human-readable field is **`detail`**, never `message`:
+  ```ts
+  // src/lib/api-client.ts — the single source of truth for the UI error shape
+  export type ApiError = { detail: string; errorCode?: string; status?: number;
+                           violations?: { field: string; message: string }[] };
+  ```
+  Components read `error.detail` (see `typescript-strict`). Map it; never swallow it.
 
 ## QueryClient defaults
 ```ts
@@ -82,3 +90,10 @@ For optimistic updates: `onMutate` snapshots + sets the cache, `onError` rolls b
 
 ## MSW (test + dev mocking)
 Define handlers per feature (`features/<d>/api/handlers.ts`), share them between Vitest and the dev server. Generate handlers from the OpenAPI spec where possible so mocks track the real contract.
+
+## Correlation header + never-swallow errors
+- The request interceptor adds a **`traceparent`** (or `X-Request-Id`) to every call so the backend correlates UI → API → logs (see `observability`/`api-contract`). Show the returned `traceId` in error UI ("ref: …").
+- **Never swallow an API error.** Every query/mutation surfaces error state to the user (toast, inline, error boundary). An empty `catch`, a dropped rejection, or a suppressed toast hiding a 4xx is a bug — it's exactly what hid real failures before. The `vite-build` lint rules (no empty catch, no floating promise) enforce it; a `frontend-testing` assertion proves the error is visible.
+
+## Contract testing (Pact, consumer side)
+Beyond generated types, write **consumer Pact tests** (see `contract-testing`) for the endpoints the UI depends on — assert the request and the response shape you read, **including error interactions**. Verified against the real backend so behavioral drift fails CI.

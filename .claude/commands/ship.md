@@ -10,7 +10,8 @@ Prepare a release. Delegate to `release-manager`. Bump hint: $ARGUMENTS (default
 ## Pre-flight gate — refuse to proceed if any is red (show evidence)
 - [ ] Backend `cd backend && ./gradlew build` green (unit + integration)
 - [ ] Frontend `cd frontend && npm run validate` green
-- [ ] `/contract-sync --check` reports IN-SYNC
+- [ ] `/contract-sync --check` reports IN-SYNC (OpenAPI + Pact)
+- [ ] `/redeploy --full` came up healthy locally (smoke passed)
 - [ ] Working tree clean; on a releasable branch
 - [ ] `docker build` both images; they start with health UP
 
@@ -21,6 +22,13 @@ Prepare a release. Delegate to `release-manager`. Bump hint: $ARGUMENTS (default
 
 ## Output
 A release summary: versions, changelog excerpt, gate results, and the **exact, un-executed** tag/push/deploy commands.
+
+## Deploy
+Releasing to a remote is `/deploy <env>` (the `deploy` skill): disk guard → push digest-pinned → one service at a time → **post-deploy verify** → rollback ready.
+
+## Commit & push (policy)
+- **Make the local release commit** (conventional message) — always, no confirmation needed.
+- **Push nothing without an exact instruction.** When the developer confirms, **ask: git, Docker, or both** — and act only on the named target. Docker Hub tags (git-sha + semver) are generated at confirm time. (See `git-workflow`.)
 
 ## Hard stop
 **Do NOT push tags/images or deploy** — present the commands and wait for explicit approval. Never ship with a red gate or open contract drift.

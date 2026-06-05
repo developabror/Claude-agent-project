@@ -1,0 +1,33 @@
+# Frontend-only local test stack — frontend + a Prism mock of the backend's OpenAPI contract.
+# Up:   /redeploy --frontend   (or: cd frontend && docker compose up -d --build)
+# Lets the UI run WITHOUT a real backend: Prism serves ../backend/openapi.json, so the frontend is
+# tested against the CONTRACT (and drift surfaces immediately). Needs backend/openapi.json to exist.
+name: app-frontend
+
+services:
+  mock-api:
+    image: stoplight/prism:4
+    command: ["mock", "-h", "0.0.0.0", "/openapi.json"]
+    volumes:
+      - ../backend/openapi.json:/openapi.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4010 >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [frontend]
+
+  frontend:
+    build: .
+    depends_on:
+      mock-api:
+        condition: service_healthy
+    # nginx proxies /api → mock-api:4010 in this stack (set the upstream via build arg / env at scaffold time).
+    environment:
+      API_UPSTREAM: http://mock-api:4010
+    ports:
+      - "8080:8080"
+    networks: [frontend]
+
+networks:
+  frontend:

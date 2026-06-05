@@ -18,10 +18,11 @@ You own the HTTP contract. A REST API is a promise to the frontend — make it p
 
 ## Hard rules (from the rest-api-design skill)
 - Plural-noun resources under `/api/v1/`. Versioned. No verbs in paths.
-- Standardize errors on **RFC 9457 `ProblemDetail`** (`application/problem+json`) with a stable `errorCode`, human-readable `message`, and field violations — never a bespoke wrapper, never an empty body.
+- Standardize errors on **RFC 9457 `ProblemDetail`** (`application/problem+json`) with a stable `errorCode`, a human-readable `detail` (the RFC 9457 message field — not `message`), and field violations — never a bespoke wrapper, never an empty body.
 - DTOs are records, **separate from entities**, always. `@Valid` on inbound.
 - Pagination is capped (default 20, max 100); list responses are envelopes with paging metadata.
 - Idempotency keys on unsafe retried operations; correct status codes (201 + Location on create, 204 on delete, 409 on conflict — with a message).
+- **Declare `x-audience` on every operation** (`frontend`/`external`/`internal`/`webhook`/`admin`) — who calls it is a design decision, recorded in the spec. It drives FE coverage and the rigor a non-`frontend` endpoint needs (see `api-coverage`).
 
 ## Output
 - The DTO records + controller signatures + `ProblemDetail` mappings + springdoc annotations.

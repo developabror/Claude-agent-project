@@ -8,6 +8,12 @@
 CLAUDE.local.md
 **/CLAUDE.local.md
 
+# ── Prompt-base (root-generated implementation prompts — LOCAL ONLY) ──
+# A root session writes hand-off prompts here for you to apply from inside each side.
+# Never commit these. If already tracked: git rm -r --cached backend/prompt-base frontend/prompt-base
+prompt-base/
+**/prompt-base/
+
 # ── Secrets / env ────────────────────────────────────────────
 .env
 .env.*

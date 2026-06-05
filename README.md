@@ -53,9 +53,12 @@ the root would be visible everywhere, so keep domain skills in their own side.)
 ```
 project-template/
 ├── .claude/                 ← ROOT: orchestration only (its skills/CLAUDE.md flow DOWN — keep neutral)
-│   ├── agents/              product-planner · api-contract-guardian · release-manager
-│   ├── skills/              monorepo-workflow · api-contract · git-workflow · zero-to-prod
-│   └── commands/            /build-zero-to-prod · /new-feature · /contract-sync · /ship · /status
+│   ├── agents/              product-planner · api-contract-guardian · api-coverage-auditor · release-manager
+│   ├── skills/              monorepo-workflow · prompt-handoff · api-contract · api-coverage · contract-testing
+│   │                        realtime-contract · local-stack · deploy · feature-flags · git-workflow · zero-to-prod
+│   └── commands/            /build-zero-to-prod · /new-feature · /contract-sync · /api-coverage · /redeploy · /ship · /deploy · /status
+├── compose.yaml             ← FULL local stack: db + backend + frontend (/redeploy --full)
+├── .env.example             ← copy to .env for local compose
 ├── CLAUDE.md                ← shared monorepo context (also flows down)
 │
 ├── frontend/                ← cd here → ONLY the frontend team is visible
@@ -66,6 +69,7 @@ project-template/
 │   │   ├── skills/          react-patterns · typescript-strict · data-fetching · design-system
 │   │   │                    frontend-testing · accessibility · web-performance · frontend-security · vite-build
 │   │   └── commands/        /scaffold-frontend · /new-component · /new-page · /wire-api
+│   ├── compose.yaml         ← frontend + Prism mock of the contract (/redeploy --frontend)
 │   ├── CLAUDE.md
 │   └── FRONTEND-SETUP.md    ← the master 0→prod frontend spec/prompt
 │
@@ -79,6 +83,7 @@ project-template/
     │   │                    backend-testing · flyway-migrations · observability · gradle-build
     │   │                    design-patterns · code-quality · logging-patterns
     │   └── commands/        /scaffold-backend · /new-endpoint · /new-entity · /add-migration
+    ├── compose.yaml         ← db + backend, API exposed (/redeploy --backend)
     ├── CLAUDE.md
     └── BACKEND-SETUP.md     ← the master 0→prod backend spec/prompt
 ```
@@ -106,12 +111,33 @@ cd frontend && claude     # only React agents/skills load
 ```
 
 ### 3. Ship a full-stack feature
-From the root: `/new-feature "<description>"` — the orchestrator splits the work, delegates the
-backend slice and the frontend slice, and runs `/contract-sync` so the types/OpenAPI stay aligned.
+From the root: `/new-feature "<description>"`. A **root session plans and hands off — it never edits
+code**: it writes a self-contained prompt into `backend/prompt-base/` and/or `frontend/prompt-base/`,
+runs `/contract-sync` so the types/OpenAPI stay aligned, and tells you what to run. You then `cd` into
+each side, launch Claude, and apply its prompt — that side's isolated team does the edits.
+(`prompt-base/` is gitignored — prompts never reach GitHub. See the `prompt-handoff` skill.)
 
 ### 4. Keep the API contract honest
 `/contract-sync` (root) is the antidote to FE↔BE drift: it diffs the backend's OpenAPI against the
-frontend's API client/types and reports or fixes mismatches.
+frontend's API client/types and reports or fixes mismatches. `contract-testing` (Pact) verifies
+*behavior* on top; `realtime-contract` (AsyncAPI) covers WebSocket/SSE/events. `/api-coverage`
+(report-only) checks the third axis — **completeness + audience**: every endpoint declares an
+`x-audience` (`frontend`/`external`/`internal`/`webhook`/`admin`), and the audit flags any **frontend**
+endpoint the SPA doesn't consume (and any external endpoint it shouldn't).
+
+### 5. Test every change as a running system
+```
+/redeploy --backend     # db + backend up, smoke the API
+/redeploy --frontend    # UI + a Prism mock of the contract (no real backend)
+/redeploy --full        # whole stack; smoke the FE↔BE seam — run before merge
+```
+Each `/redeploy` rebuilds the changed images, waits for healthchecks, and smoke-tests — the running
+system is the proof. Three compose files keep blast radius small (per-side) or complete (root).
+
+### 6. Release & deploy
+`/ship` prepares + verifies a release (versions, changelog, gates, local `--full` smoke). `/deploy <env>`
+runs the verified digest to a remote with a disk guard, one-service-at-a-time, **post-deploy health
+verify**, and a ready rollback. Both are explicit, approval-gated.
 
 ---
 
@@ -119,9 +145,9 @@ frontend's API client/types and reports or fixes mismatches.
 
 | Tier | Used by | Rationale |
 |---|---|---|
-| **opus** | orchestrators, planners, security & code reviewers | hard reasoning, cross-cutting judgment, adversarial review |
-| **sonnet** | implementation engineers (react, spring-boot, jpa, tests, build) | strong code generation at lower cost |
-| **haiku** | mechanical/cheap helpers (scaffolding boilerplate, formatting) | fast and inexpensive |
+| **opus** | architects, planner, security auditors, code/adversarial reviewers, performance, design-system enforcer, a11y | hard reasoning, cross-cutting judgment, adversarial review |
+| **sonnet** | implementation engineers (react, spring-boot, api, jpa, tests, build, data, observability) + contract/coverage/release coordinators | strong code generation at lower cost |
+| **haiku** | deterministic generation (the db-migration engineer) | fast and inexpensive |
 
 Each agent declares its own `model:` in frontmatter, so the right tier is used automatically.
 

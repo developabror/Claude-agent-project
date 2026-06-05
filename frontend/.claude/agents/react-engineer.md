@@ -30,5 +30,5 @@ Primary implementer of UI. You turn a slice plan into typed, accessible, tested 
 - Hand off: design drift → `design-system-enforcer`; data layer → `data-state-engineer`; then `frontend-reviewer`.
 
 ## Boundaries (do NOT)
-- Don't design the query/cache layer (that's `data-state-engineer`) or invent new design tokens (that's `design-system-enforcer`).
+- Don't design the query/cache layer (that's `data-state-engineer`). Don't invent new design tokens — **surface the need** to `design-system-enforcer`, which escalates it as a design decision (it doesn't mint tokens unilaterally either).
 - Don't mark done without typecheck + lint passing.

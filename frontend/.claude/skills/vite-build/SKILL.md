@@ -73,3 +73,10 @@ HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:8080/ || 
 ## CI (GitHub Actions)
 Cached `npm ci` → `typecheck` → `lint` → `vitest --coverage` → `playwright` (cache browsers) →
 `build` → buildx push tagged **sha + semver**. typecheck/lint/test are **required PR gates**. Never ship a `latest`-only tag to staging/prod.
+
+## Lint rules that enforce "never swallow an error"
+Add to the flat config so silent failures fail the build (pairs with `frontend-security`/`data-fetching`):
+- `@typescript-eslint/no-floating-promises: "error"` — every promise is awaited or explicitly handled.
+- `no-empty: ["error", { "allowEmptyCatch": false }]` — no empty `catch {}`.
+- `@typescript-eslint/no-misused-promises: "error"`.
+- `no-console: ["warn", { "allow": ["error", "warn"] }]` — don't ship debug logs.

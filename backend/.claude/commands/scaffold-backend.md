@@ -14,9 +14,10 @@ Delegate each phase to the owning specialist; use plan mode before large steps; 
 4. **API** (`api-designer` + `spring-boot-engineer`): DTO records, thin controllers under `/api/v1`, `ProblemDetail` `@RestControllerAdvice`, springdoc annotations → commit `openapi.json`.
 5. **Security** (`spring-security-engineer`): stateless `SecurityFilterChain`, OAuth2 resource server, method security.
 6. **Config** (`spring-boot-engineer`): `@ConfigurationProperties` records, `application.yml` + profiles + `${ENV}` placeholders.
-7. **Tests** (`backend-test-engineer`): Testcontainers + `@ServiceConnection` integration tests (positive + negative).
-8. **Observability** (`observability-engineer`): Actuator probes, Micrometer OTLP, structured JSON logging.
-9. **Package + CI** (`backend-build-engineer`): layered non-root Dockerfile, `compose.yaml`, CI pipeline.
+7. **Tests** (`backend-test-engineer`): Testcontainers + `@ServiceConnection` integration tests (positive + negative); **property/invariant tests** for business rules; **Pact provider verification** (`contract-testing`). Invariants get a **DB constraint** (`jpa-patterns`), not just service code.
+8. **Observability** (`observability-engineer`): Actuator probes, Micrometer OTLP, structured JSON logging, **incoming `traceparent` continued + `traceId` echoed** in ProblemDetail.
+9. **Package + CI** (`backend-build-engineer`): layered non-root Dockerfile; **`backend/compose.yaml` + the root `compose.yaml` backend service** (kept in sync); CI pipeline.
 10. **Review gate** (`backend-code-reviewer` + `backend-security-auditor`): resolve every Critical.
+11. **Smoke** (`backend-build-engineer`): `/redeploy --backend` — stack comes up green (db healthy → `/actuator/health/readiness` UP). The running system is the proof.
 
-Done when `./gradlew build` is green, the image runs with `/actuator/health` UP, and `openapi.json` is committed.
+Done when `./gradlew build` is green, **`/redeploy --backend` is healthy**, and `openapi.json` is committed.

@@ -44,7 +44,7 @@ Effective logging for Java applications with focus on structured, AI-parsable fo
 logging:
   structured:
     format:
-      console: logstash  # Spring Boot 3.4+
+      console: ecs  # Spring Boot 3.4+ — `ecs` is the canonical default (matches the `observability` skill); `logstash`/`gelf` are alternatives
 
 # When YOU need to read logs manually:
 # Option 1: Use jq

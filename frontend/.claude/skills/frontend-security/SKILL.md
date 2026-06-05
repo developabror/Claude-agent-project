@@ -32,3 +32,10 @@ The browser is an injection surface, the token is a target, the dependency tree 
 - [ ] `rel="noopener"` on `_blank`; CSP recommended
 - [ ] `npm audit` clean or risk-accepted
 - [ ] Every client-side check is mirrored by a server-side check
+- [ ] No swallowed errors — every API failure renders a visible state
+
+## Errors must be visible (no silent failures)
+A swallowed error is a UX *and* safety hole: the user acts on false success, and a real auth/permission
+failure goes unseen. Every API error path renders a visible state — no empty `catch {}`, no ignored
+promise rejection, no toast suppressed for a 4xx. Enforced by the `vite-build` lint rules and a
+`frontend-testing` assertion that the error is surfaced.

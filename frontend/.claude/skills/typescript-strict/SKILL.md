@@ -22,7 +22,7 @@ Types are a correctness tool, not decoration. The codebase runs `strict` + `noUn
 function render(s: RequestState): ReactNode {
   switch (s.status) {
     case "loading": return <Spinner/>;
-    case "error":   return <Error msg={s.error.message}/>;
+    case "error":   return <Error msg={s.error.detail}/>;   // ApiError.detail (defined in data-fetching) — not .message
     case "ok":      return <List items={s.data}/>;
     default: { const _x: never = s; return _x; }   // compile error if a case is added
   }

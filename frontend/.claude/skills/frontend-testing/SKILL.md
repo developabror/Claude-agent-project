@@ -42,3 +42,13 @@ Share handlers between tests and the dev server. Cover **loading, success, the `
 
 ## Running & coverage
 `npm run test` (Vitest) for the inner loop; `npx playwright test` for E2E. Gate coverage on changed code; reproduce reported bugs with a **failing test first**.
+
+## Error is surfaced (regression guard)
+For every mutation/query, add a test that an error response (`ProblemDetail` 400/401/409) renders a
+**visible** error (`getByRole('alert')` / inline message). A "it failed silently" green is the bug this
+prevents — no test may pass by swallowing the error.
+
+## Consumer contract (Pact)
+Write consumer-side **Pact** tests (see `contract-testing`) for the endpoints the UI depends on: assert
+the request and the response shape you read, **including error interactions**. The pact is verified
+against the real backend, so behavioral drift fails CI — codegen catches shape, Pact catches behavior.

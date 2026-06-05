@@ -11,6 +11,8 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git tag:*)",
       "Bash(./gradlew:*)",
       "Bash(gradle:*)",
       "Bash(java:*)",

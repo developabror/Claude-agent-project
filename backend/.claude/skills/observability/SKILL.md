@@ -48,3 +48,9 @@ trace. Ship logs via **stdout** to the platform collector. **Never log secrets o
 ## MUST NOT
 - Expose `env`/`heapdump`/`threaddump` publicly; log tokens/PII; instrument hot loops into a perf
   regression; couple code to a specific observability vendor (keep it OTLP).
+
+## End-to-end trace correlation (FE → BE → logs)
+The point of tracing is to turn "a user saw an error" into one query.
+- **Continue the incoming trace:** read the `traceparent` header (Micrometer Tracing / OTel context propagation continues it; start a fresh trace if absent). `traceId`/`spanId` land in MDC automatically → every JSON log line carries them.
+- **Echo `traceId` to the client:** include it in `ProblemDetail` (non-prod) and a response header (`X-Request-Id`/`traceresponse`) so the frontend can show "ref: &lt;traceId&gt;" on errors.
+- Result: one `traceId` ties the UI action, the HTTP request, every log line, the DB span, and any emitted event (`realtime-contract`) together — a user report becomes a single grep, not a hunt.

@@ -22,6 +22,7 @@ You own how the frontend talks to the backend and caches the result. Components 
 - **Query-key factory** per feature (`orderKeys.list(filters)`, `orderKeys.detail(id)`); mutations invalidate the right keys; optimistic updates roll back on error.
 - Tokens in **HttpOnly cookies or memory**, never `localStorage`. Sensible `QueryClient` defaults (`staleTime`, `retry`, `refetchOnWindowFocus`).
 - Prefer **generated types/hooks from the backend OpenAPI** (`/wire-api`) over hand-written request shapes.
+- **Only consume `frontend`-audience endpoints.** If the UI seems to need an `external`/`internal`/`webhook` endpoint, that's a design question (re-classify it, or add a `frontend` endpoint / BFF) — never call a non-`frontend` endpoint directly (that's an audience *leak*; see `api-coverage`).
 
 ## Definition of done
 - Hooks expose loading/error/data cleanly; MSW handlers exist; a query/mutation test passes.

@@ -23,11 +23,12 @@ execute by delegating to specialists, not a subagent that delegates.
 - Net: launch in `frontend/` → only frontend; in `backend/` → only backend; at root → both, on demand.
 
 ## Driving a full-stack change (the loop)
+**A root session plans and hands off — it does not edit code (see `prompt-handoff`).**
 1. **Plan** — delegate to `product-planner` (or `/new-feature`). Define the **contract seam first**.
-2. **Backend slice** — work in `backend/` (or delegate its specialists): architect → api-designer (+ commit `openapi.json`) → jpa/migration → spring-boot-engineer → tests → security → reviewer.
-3. **Sync contract** — `/contract-sync` regenerates the frontend client from the new spec (see `api-contract`).
-4. **Frontend slice** — work in `frontend/`: architect → data-state-engineer (uses generated client) → react-engineer → tests → a11y/perf/security → reviewer.
-5. **Verify** — both gates green (`./gradlew build`, `npm run validate`) + contract gate.
+2. **Write the side prompts** — emit `backend/prompt-base/<NNN>-<slug>.md` and/or `frontend/prompt-base/<NNN>-<slug>.md` describing each slice (architect → api-designer (+ commit `openapi.json`) → jpa/migration → engineer → tests → reviewer for backend; architect → data-state → react-engineer → tests → a11y/perf/security → reviewer for frontend).
+3. **Apply per side** — the user `cd`s into each side, runs Claude, and applies the prompt(s); that side's specialists do the edits and run the side gate + `/redeploy --<side>`.
+4. **Sync contract** — `/contract-sync` (root, codegen — allowed) regenerates the frontend client from the new spec.
+5. **Verify** — both gates green (`./gradlew build`, `npm run validate`) + contract gate + `/redeploy --full`.
 6. **Ship** — `/ship` (release-manager) prepares versions/changelog; deploy is explicit.
 
 ## Parallelism
@@ -35,6 +36,8 @@ execute by delegating to specialists, not a subagent that delegates.
 - Across sides, backend and frontend slices can proceed in parallel **only after the contract seam is fixed** — otherwise the frontend implements against a moving target.
 - Reserve multi-agent fan-out for genuinely parallel, high-value work (it costs ~15× the tokens of a single pass).
 
-## Working on one side from the root
-Prefer `cd backend` / `cd frontend` and launch there for a focused, isolated session. If you stay at
-root, you can drop the other side's CLAUDE.md via `claudeMdExcludes` in `.claude/settings.local.json`.
+## Working on one side
+A root session **hands off** implementation as prompts in `<side>/prompt-base/`; you then `cd backend`
+/ `cd frontend`, launch Claude there (focused, isolated session), and apply the prompt — that side's
+team does the edits. If you stay at root, drop the other side's CLAUDE.md via `claudeMdExcludes` in
+`.claude/settings.local.json`.

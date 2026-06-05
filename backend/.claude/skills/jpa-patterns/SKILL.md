@@ -199,3 +199,14 @@ public class OrderService {
         // Access within transaction
         int itemCount = order.getItems().size();
 ```
+
+## Invariants belong in the schema, not just the service
+"It should never happen that…" must be enforced where it **can't be bypassed** — a DB constraint —
+backed by a test. A service-layer `if` check is racy (TOCTOU) and gets forgotten.
+- **Uniqueness** → `UNIQUE` (single/composite), never a `findBy…`-then-insert pre-check.
+- **Allowed values / ranges** → `CHECK` (e.g. `CHECK (quantity > 0)`).
+- **No overlap / no double-booking** → Postgres `EXCLUDE USING gist (resource_id WITH =, period WITH &&)` — not application-level overlap logic (that's the bug class that recurred before).
+- **Referential integrity** → `FOREIGN KEY` with the right `ON DELETE`.
+Write them in **Flyway migrations** (see `flyway-migrations`); the entity mirrors them. For every
+invariant, add a test that the violating case is **rejected** — that's the proof it holds when the code
+is wrong (property tests in `backend-testing`).

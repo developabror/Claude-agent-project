@@ -12,6 +12,8 @@
       "Bash(git log:*)",
       "Bash(git branch:*)",
       "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git tag:*)",
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(find:*)",

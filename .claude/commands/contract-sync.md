@@ -16,4 +16,4 @@ Run the API contract pipeline (see the `api-contract` skill). Delegate to `api-c
    - `--fix`: commit the regenerated `openapi.json` and frontend client; **never hand-edit generated files**. For breaking backend changes, recommend `/api/v2` or a deprecation, not a silent reshape.
 
 ## Output
-`IN-SYNC` or `DRIFT` with the exact regeneration command and, if `--fix`, the resulting diff + the now-green gate. Confirm the error envelope (`ProblemDetail` with a message), pagination shape, and 409-with-message all agree on both sides.
+`IN-SYNC` or `DRIFT` with the exact regeneration command and, if `--fix`, the resulting diff + the now-green gate. Confirm the error envelope (`ProblemDetail` with a human-readable `detail` — the RFC 9457 field, not `message` — plus a stable `errorCode`), pagination shape, and 409-with-`detail` all agree on both sides.

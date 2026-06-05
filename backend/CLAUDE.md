@@ -42,10 +42,17 @@ Use the built-in **Explore** agent for cheap read-only recon before building.
 - Security **deny-by-default**, stateless, CORS allow-list (never `*`+credentials); secrets via env/Vault, never in source/images/logs.
 - Tests cover **positive and negative**; integration tests use **Testcontainers** (never H2 as a Postgres stand-in).
 - Paths under `/api/v1`; pagination capped (default 20, max 100).
+- **Invariants are DB constraints** (unique/check/`EXCLUDE`) + a rejecting/property test — never just a service `if`.
+- **Continue the incoming `traceparent`** and echo `traceId` in `ProblemDetail`/logs (end-to-end correlation).
+- A single **`ErrorCode`** enum is the catalog (exposed in OpenAPI). Ship risky work behind a **feature flag**.
+- **Pact provider verification** runs in the suite; the async surface (sockets/events) has its own `asyncapi.yaml` contract.
 
 ## Working principles
-Plan non-trivial work first. Close every task with `./gradlew test`/`build` evidence — never "done"
-on a red build. Run `backend-code-reviewer` (+ `backend-security-auditor` for sensitive changes)
+Plan non-trivial work first. Close every task with `./gradlew test`/`build` evidence **and a
+`/redeploy --backend` local smoke** (db + backend up, `/actuator/health/readiness` UP) — never "done"
+on a red build or an unrun stack. Keep `backend/compose.yaml` and the root `compose.yaml` in sync.
+**Commit & push policy:** finalize → local commit always; never push to a git remote or Docker Hub
+without an exact instruction (then ask git/Docker/both) — see root `CLAUDE.md` / `git-workflow`. Run `backend-code-reviewer` (+ `backend-security-auditor` for sensitive changes)
 before merge. Bump version per semver (PATCH each generated version) and update README/CHANGELOG when
 the project requires it. Smallest correct diff; find root causes, not band-aids.
 

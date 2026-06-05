@@ -11,6 +11,8 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git tag:*)",
       "Bash(npm install:*)",
       "Bash(npm ci:*)",
       "Bash(npm run:*)",

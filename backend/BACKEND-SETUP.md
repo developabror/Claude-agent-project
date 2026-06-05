@@ -31,7 +31,7 @@ testcontainers (postgres, junit-jupiter)`. Add `@SpringBootApplication` in `api`
 
 ## Phase 2 — Domain + persistence (`jpa-persistence-engineer` + `db-migration-engineer`)
 - `domain`: pure model + ports (interfaces), no Spring/JPA.
-- `infra`: `@Entity` (LAZY associations) + repositories implementing the ports; `application` wires them.
+- `infra`: `@Entity` (LAZY associations) + repositories implementing the ports; the `api` module's `@SpringBootApplication` (the composition root) wires them — the layout stays the canonical 5 modules (common/domain/infra/service/api).
 - `src/main/resources/db/migration/V1__init.sql` (Flyway, plain Postgres SQL; indexes/constraints here).
 - `spring.jpa.hibernate.ddl-auto=validate`, `spring.jpa.open-in-view=false`, explicit HikariCP sizing.
 ✅ **Check:** `@DataJpaTest` against a Testcontainers Postgres passes; `flywayValidate` green.
