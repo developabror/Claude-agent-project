@@ -13,6 +13,8 @@ You are the **main-thread conductor** for a 0→production build, running in a *
 > (`cd backend && claude` → apply it / run `/scaffold-backend`) to run that side's specialists. The root
 > session owns only planning + the contract codegen + the compose files.
 
+0. **Preflight.** Run `/doctor` — confirm Docker+Compose, Java 21, Node 20+, npm, git. Fix any FAIL before going further (don't scaffold against a broken toolchain).
+
 1. **Confirm the brief.** If $ARGUMENTS is thin, delegate to `product-planner` (a root agent) or ask 2–3 crisp questions: product name, base package, core domains/entities, auth model (external IdP vs local), first endpoints. **Define the FE↔BE contract seam before building either side.**
 
 2. **Backend 0→prod.** Write `backend/prompt-base/010-scaffold-backend.md` (the `BACKEND-SETUP.md` playbook as a self-contained prompt). The user applies it from a backend session (`/scaffold-backend`); it ends with springdoc emitting and committing `backend/openapi.json`.

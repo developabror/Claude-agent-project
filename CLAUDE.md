@@ -40,6 +40,7 @@ into a side to use them, or let the side's `/scaffold-*` command drive them.)
 ## Root commands
 | Command | Does |
 |---|---|
+| `/doctor` | preflight the dev environment (Docker, Java 21, Node 20+, npm, git) before scaffolding |
 | `/build-zero-to-prod` | empty template → deployable full-stack app (drives both `/scaffold-*`) |
 | `/new-feature "<desc>"` | full-stack feature, contract-first, reviews as the gate |
 | `/contract-sync [--check\|--fix]` | reconcile the FE↔BE contract (the anti-drift gate) |

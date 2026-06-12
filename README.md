@@ -56,7 +56,7 @@ project-template/
 │   ├── agents/              product-planner · api-contract-guardian · api-coverage-auditor · release-manager
 │   ├── skills/              monorepo-workflow · prompt-handoff · api-contract · api-coverage · contract-testing
 │   │                        realtime-contract · local-stack · deploy · feature-flags · git-workflow · zero-to-prod
-│   └── commands/            /build-zero-to-prod · /new-feature · /contract-sync · /api-coverage · /redeploy · /ship · /deploy · /status
+│   └── commands/            /doctor · /build-zero-to-prod · /new-feature · /contract-sync · /api-coverage · /redeploy · /ship · /deploy · /status
 ├── compose.yaml             ← FULL local stack: db + backend + frontend (/redeploy --full)
 ├── .env.example             ← copy to .env for local compose
 ├── CLAUDE.md                ← shared monorepo context (also flows down)
@@ -162,4 +162,6 @@ Each agent declares its own `model:` in frontmatter, so the right tier is used a
 - **Add a service?** Create a new sibling folder with its own `.claude/` — it's automatically
   isolated, and the root orchestrator can coordinate it.
 
-See `docs/ARCHITECTURE.md` for the full design rationale and the discovery-semantics deep dive.
+See `docs/ARCHITECTURE.md` for the full design rationale and the discovery-semantics deep dive, and
+`docs/DECISIONS.md` for the ADR log (the *why* behind every major choice). Run `/doctor` first to
+confirm your toolchain.

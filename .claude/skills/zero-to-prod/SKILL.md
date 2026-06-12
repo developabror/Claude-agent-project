@@ -11,6 +11,7 @@ full-stack app. The detailed per-side steps live in `backend/BACKEND-SETUP.md` a
 the conductor.
 
 ## Order of operations
+0. **Preflight** — run `/doctor` (Docker+Compose, Java 21, Node 20+, npm, git). Fix any FAIL first.
 1. **Confirm the brief** (delegate `product-planner` if non-trivial): product name, base package
    (`com.example.app` default), domains/entities, auth model (external IdP vs local),
    and the first few endpoints. Define the **contract seam** before building either side.
