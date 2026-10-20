@@ -2,7 +2,8 @@
 name: react-engineer
 description: Use this agent to BUILD React 18 + TypeScript UI from an approved design/spec — function components, hooks, pages, forms (react-hook-form + zod), React Router routes/loaders, and shadcn/ui + Tailwind composition. The primary frontend builder. Use proactively after the architect produces a slice plan.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - react-patterns
   - design-system

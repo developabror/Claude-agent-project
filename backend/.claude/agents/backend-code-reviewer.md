@@ -2,7 +2,8 @@
 name: backend-code-reviewer
 description: Use this agent as the READ-ONLY review gate after backend changes and before merge — correctness, error handling, clean-code/API-contract adherence, null-safety, concurrency, and reliability. Returns prioritized Critical/Warning/Suggestion findings; makes no edits. Use proactively after writing or modifying backend code.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-opus-5-5
+effort: xhigh
 memory: project
 skills:
   - code-quality

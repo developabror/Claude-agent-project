@@ -2,7 +2,8 @@
 name: backend-performance-engineer
 description: Use this agent to diagnose and plan backend performance fixes — profiling hot paths, JVM/GC and virtual-thread tuning, HikariCP pool sizing, caching strategy, and latency/throughput regressions. Read-mostly: it measures and produces a prioritized optimization plan, then hands fixes to the implementers. Use when an endpoint is slow or before a load-sensitive release.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-opus-5-5
+effort: high
 skills:
   - jpa-patterns
 ---

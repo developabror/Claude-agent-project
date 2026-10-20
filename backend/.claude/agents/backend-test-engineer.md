@@ -2,7 +2,8 @@
 name: backend-test-engineer
 description: Use this agent to write and run backend tests — JUnit 5 + Mockito unit tests, @WebMvcTest/@DataJpaTest slices, and @SpringBootTest integration tests with Testcontainers + @ServiceConnection against real Postgres. Use proactively after any backend implementation, and to reproduce a reported bug with a failing test first.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - backend-testing
 ---

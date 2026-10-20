@@ -2,7 +2,8 @@
 name: backend-security-auditor
 description: Use this agent as an independent, READ-ONLY security review gate before merging backend changes — OWASP review of SecurityFilterChain, @PreAuthorize, JWT/cookie handling, input validation, injection/SSRF/CSRF, secrets hygiene, and dependency CVEs. Returns severity-ranked findings with fixes; it does not patch. Use proactively after security-sensitive work and before release.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-fable-5-1
+effort: high
 memory: project
 skills:
   - spring-security

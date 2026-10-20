@@ -84,8 +84,8 @@ Format: `## NNN. Title` · **Decision** · **Why** · **Status** (Accepted / Sup
 **Status:** Accepted.
 
 ## 016. Model tiers per agent
-**Decision:** opus = architecture/security/review/performance/planning; sonnet = implementation + contract/coverage/release coordination; haiku = deterministic generation (DB migrations).
-**Why:** upgrading the model on judgment-heavy work beats more tokens; cheap mechanical work doesn't need opus. Aliases are portable; pin full IDs if a tier is load-bearing and an alias mis-resolves.
+**Decision (revised 2026-10-21):** pin full IDs + explicit `effort:`. Fable 5.1 = the two security auditors; Opus 5.5 = reviewers (xhigh), architecture/planning/API design/security impl/performance/a11y (high); Sonnet 5.5 = implementation, tests, build, contract/release coordination, migrations, design-system enforcement; Haiku 5.5 = API coverage audit. Full table: `docs/ARCHITECTURE.md` §6.
+**Why:** upgrading the model on judgment-heavy work beats more tokens; cheap mechanical work doesn't need opus. Opus 5.5 defaults to `medium` effort, so the gates need it set explicitly. Migrations moved off Haiku because data loss is irreversible. Pinned IDs are explicit and reviewable, but they must be re-reviewed each model generation.
 **Status:** Accepted.
 
 ## 017. Enforcement: hooks over prose

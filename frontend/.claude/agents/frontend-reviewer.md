@@ -2,7 +2,8 @@
 name: frontend-reviewer
 description: Use this agent as the READ-ONLY adversarial review gate after frontend changes and before merge — correctness vs the requirement, edge cases, type-safety, accessibility/perf regressions, and design/contract drift. Sees only the diff + plan; reports findings, makes no edits. Use proactively after writing or modifying frontend code.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-opus-5-5
+effort: xhigh
 memory: project
 skills:
   - react-patterns

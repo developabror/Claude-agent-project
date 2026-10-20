@@ -2,7 +2,8 @@
 name: data-state-engineer
 description: Use this agent for the server-state and networking layer — TanStack Query v5 queryOptions + query-key factories, the typed axios client with auth/refresh interceptors, mutations with optimistic updates and cache invalidation, and MSW test handlers. Use proactively when wiring a component to the backend API or fixing caching/refetch/loading behavior.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: sonnet
+model: claude-sonnet-5-5
+effort: high
 skills:
   - data-fetching
 ---

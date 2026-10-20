@@ -2,7 +2,8 @@
 name: api-designer
 description: Use this agent to design or change the REST contract surface — resource naming, versioning (/api/v1), DTO/entity separation, status codes, pagination caps, the RFC 9457 ProblemDetail error envelope, idempotency, and springdoc/OpenAPI annotations. Use proactively whenever an endpoint is added or its request/response shape changes, to keep the FE↔BE contract stable.
 tools: Read, Write, Edit, Grep, Glob
-model: sonnet
+model: claude-opus-5-5
+effort: high
 skills:
   - rest-api-design
 ---

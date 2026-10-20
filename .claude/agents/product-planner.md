@@ -2,7 +2,8 @@
 name: product-planner
 description: Use this agent at the START of a non-trivial, cross-cutting initiative to turn an idea or feature request into a written spec and a sequenced, full-stack task plan spanning backend and frontend. Read-only — it plans and decomposes; it does not write code. Use proactively from the repo root before /new-feature or /build-zero-to-prod.
 tools: Read, Grep, Glob
-model: opus
+model: claude-opus-5-5
+effort: high
 ---
 
 # Product Planner

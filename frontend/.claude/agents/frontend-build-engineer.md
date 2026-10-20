@@ -2,7 +2,8 @@
 name: frontend-build-engineer
 description: Use this agent for the frontend build/release lifecycle — Vite config, ESLint 9 flat config + Prettier, env handling, the multi-stage Node→nginx Dockerfile (non-root, SPA fallback), and GitHub Actions CI. Use proactively when packaging, wiring CI, or configuring tooling/env.
 tools: Read, Write, Edit, Bash
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - vite-build
   - local-stack

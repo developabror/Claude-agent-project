@@ -2,7 +2,8 @@
 name: api-contract-guardian
 description: Use this agent to detect and fix FE↔BE API contract drift — it diffs the backend's springdoc OpenAPI spec against the frontend's generated types/client and reports or repairs mismatches (changed shapes, status codes, error envelopes, removed fields). Use proactively after any endpoint or DTO change, and as the /contract-sync engine. The antidote to the recurring frontend/backend drift.
 tools: Read, Grep, Glob, Edit, Bash
-model: sonnet
+model: claude-sonnet-5-5
+effort: high
 memory: project
 skills:
   - api-contract

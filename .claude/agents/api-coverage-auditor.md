@@ -2,7 +2,8 @@
 name: api-coverage-auditor
 description: Use from the repo root to audit frontend API coverage and endpoint audience — cross-references backend openapi.json (grouped by x-audience) against real frontend call sites, and reports which frontend-audience endpoints are uncovered, which are unclassified, and any phantom/leak calls. Read-only and report-only (does not block the build). Use proactively after adding endpoints or before a release review.
 tools: Read, Grep, Glob, Bash
-model: sonnet
+model: claude-haiku-5-5
+effort: medium
 memory: project
 skills:
   - api-coverage

@@ -2,7 +2,8 @@
 name: backend-architect
 description: Use this agent BEFORE writing backend code for any non-trivial feature, module, or service boundary. Designs the Gradle multi-module layout, REST/event contracts, service layering, and bounded contexts, then emits a written spec (ADR + skeleton) other agents implement. Read-only — it designs, it does not code. Use proactively at the start of a backend feature.
 tools: Read, Grep, Glob
-model: opus
+model: claude-opus-5-5
+effort: high
 skills:
   - spring-boot
   - design-patterns

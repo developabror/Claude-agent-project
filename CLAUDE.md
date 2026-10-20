@@ -93,5 +93,5 @@ before done. Copy `.env.example` → `.env`.
 ## Adapting the template
 Frontend framework swap → edit `frontend/.claude/skills`. Maven instead of Gradle → edit
 `backend/.claude/skills/gradle-build` + `backend-build-engineer`. New service → new sibling folder
-with its own `.claude/` (auto-isolated). Model tiers are per-agent (`opus`/`sonnet`/`haiku`); verify
-with `/agents` and pin full model IDs if an alias mis-resolves.
+with its own `.claude/` (auto-isolated). Model tiers are per-agent, pinned to full IDs + `effort:`
+(table in `docs/ARCHITECTURE.md` §6); verify with `/agents` and re-review when a new model generation ships.

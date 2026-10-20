@@ -2,7 +2,8 @@
 name: observability-engineer
 description: Use this agent to instrument the backend for production — Micrometer Observation metrics, OpenTelemetry (OTLP) tracing, structured JSON logging with traceId/spanId in MDC, Actuator health/readiness/liveness probes, and SLI/SLO definitions. Use proactively before first deploy and when adding a new service or critical path.
 tools: Read, Write, Edit, Grep, Glob
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - observability
   - logging-patterns

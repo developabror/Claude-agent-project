@@ -2,7 +2,8 @@
 name: jpa-persistence-engineer
 description: Use this agent for persistence work — entity mappings, fetch strategies, N+1 elimination, @Transactional boundaries, JPQL/Criteria/native query tuning, projections, and LazyInitializationException fixes. Use proactively when adding entities/repositories or when a query is slow or throws lazy-loading errors.
 tools: Read, Write, Edit, Bash, Grep, Glob
-model: sonnet
+model: claude-sonnet-5-5
+effort: high
 skills:
   - jpa-patterns
 ---

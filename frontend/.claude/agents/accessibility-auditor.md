@@ -2,7 +2,8 @@
 name: accessibility-auditor
 description: Use this agent to audit and enforce WCAG 2.2 AA — semantic HTML, ARIA correctness, keyboard navigation, focus management, color contrast, and reduced-motion. Runs axe / eslint-jsx-a11y and reports prioritized fixes; read-mostly so it advises rather than silently rewriting. Use proactively after building UI and before a UI release.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-opus-5-5
+effort: high
 memory: project
 skills:
   - accessibility

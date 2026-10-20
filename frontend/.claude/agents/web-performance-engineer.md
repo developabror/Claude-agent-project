@@ -2,7 +2,8 @@
 name: web-performance-engineer
 description: Use this agent to optimize Core Web Vitals (LCP/INP/CLS) and the Vite bundle — route-level code splitting, dynamic imports, lazy/Suspense, image/font strategy, memoization, virtualization, and bundle/Lighthouse analysis. Use when a page is slow/heavy or before a performance-sensitive release.
 tools: Read, Grep, Glob, Bash, Edit
-model: opus
+model: claude-opus-5-5
+effort: high
 skills:
   - web-performance
 ---

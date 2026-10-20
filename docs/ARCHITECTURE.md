@@ -67,14 +67,23 @@ The default already gives full FE↔BE isolation. Two extra knobs if you want mo
 
 ## 6. Model tiers & a caveat
 
-- **opus** — architecture, security, code review, performance, planning (judgment, costly to get wrong).
-- **sonnet** — implementation (engineers, data layer, tests, build).
-- **haiku** — mechanical generation (migrations).
+Every agent pins a **full model ID** and an explicit **`effort:`** (reviewed 2026-10-21):
 
-The `model:` field accepts aliases (`opus`/`sonnet`/`haiku`) or full IDs (`claude-opus-4-8`,
-`claude-sonnet-4-6`, `claude-haiku-4-5`). The alias path has had reported silent-fallback bugs — if a
-tier is load-bearing, pin the full ID and verify with `/agents`. `CLAUDE_CODE_SUBAGENT_MODEL` can
-override all subagents for cost control.
+| Model | Effort | Agents (why) |
+|---|---|---|
+| `claude-fable-5-1` | high | `backend-security-auditor`, `frontend-security-auditor` — independent security gates; a miss is a breach, and they run rarely |
+| `claude-opus-5-5` | xhigh | `backend-code-reviewer`, `frontend-reviewer` — the adversarial merge gates |
+| `claude-opus-5-5` | high | `product-planner`, `backend-architect`, `frontend-architect`, `api-designer` (the FE↔BE contract seam), `spring-security-engineer`, `backend-performance-engineer`, `web-performance-engineer`, `accessibility-auditor` |
+| `claude-sonnet-5-5` | high | `api-contract-guardian`, `release-manager`, `jpa-persistence-engineer`, `data-state-engineer` — subtle-but-bounded (breaking-change calls, N+1/transactions, the 401-refresh race) |
+| `claude-sonnet-5-5` | medium | `spring-boot-engineer`, `react-engineer`, both test engineers, both build engineers, `observability-engineer`, `db-migration-engineer`, `design-system-enforcer` |
+| `claude-haiku-5-5` | medium | `api-coverage-auditor` — mechanical spec↔call-site cross-reference, report-only |
+
+Notes: **Opus 5.5 defaults to `medium` effort**, so `effort:` is set explicitly everywhere. `db-migration-engineer`
+moved off Haiku (a migration that loses data can't be undone). `design-system-enforcer` moved to Sonnet (rule matching
+against a token list). Fable 5.1 costs about 2.5× Opus 5.5, so it's kept to the two security gates; if Fable isn't
+available to your account, set those two to `claude-opus-5-5` + `xhigh`. Pinned IDs **don't auto-upgrade** — re-review
+this table when a new model generation ships (aliases `opus`/`sonnet`/`haiku`/`fable` follow the latest but have had
+silent-fallback reports). Verify with `/agents`; `CLAUDE_CODE_SUBAGENT_MODEL` overrides all subagents for cost control.
 
 ## 7. Enforcement: hooks > prose
 

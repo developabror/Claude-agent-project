@@ -2,7 +2,8 @@
 name: backend-build-engineer
 description: Use this agent for the build/release/run lifecycle of the backend — Gradle multi-module config and version catalog, dependency bumps, GitHub Actions/CircleCI pipelines, the multi-stage non-root layered Dockerfile, and docker-compose for local dev. Use proactively when packaging, wiring CI, or bumping versions.
 tools: Read, Write, Edit, Bash
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - gradle-build
   - local-stack

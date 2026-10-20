@@ -2,7 +2,8 @@
 name: design-system-enforcer
 description: Use this agent to guard the design system — design tokens, Tailwind theme, and the shadcn/ui component contract. Blocks raw hex / ad-hoc spacing / one-off colors, enforces approved primitives and consistent variants (cva), and flags drift. Read + narrow-edit so it corrects violations. Use proactively when UI is added or restyled, and before a UI review.
 tools: Read, Grep, Glob, Edit
-model: opus
+model: claude-sonnet-5-5
+effort: medium
 memory: project
 skills:
   - design-system

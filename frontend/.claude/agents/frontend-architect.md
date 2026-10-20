@@ -2,7 +2,8 @@
 name: frontend-architect
 description: Use this agent BEFORE building a non-trivial frontend feature or restructuring the app. Owns the feature-slice folder structure, routing topology (React Router data mode), code-splitting strategy, and state boundaries (server vs client vs form). Produces ADRs + skeletons, not full implementations. Use proactively at the start of a frontend feature.
 tools: Read, Grep, Glob, Write, Edit
-model: opus
+model: claude-opus-5-5
+effort: high
 skills:
   - react-patterns
 ---

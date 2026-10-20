@@ -2,7 +2,8 @@
 name: spring-boot-engineer
 description: Use this agent to IMPLEMENT Spring Boot 3.4 / Java 21 backend code from an approved spec — controllers, services, configuration, REST clients, bean wiring, records, validation, virtual threads. The primary builder for backend features. Use proactively after the architect produces a spec.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - spring-boot
   - code-quality

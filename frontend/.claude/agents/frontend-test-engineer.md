@@ -2,7 +2,8 @@
 name: frontend-test-engineer
 description: Use this agent to write and run frontend tests — Vitest + React Testing Library unit/integration tests, MSW network mocks, and Playwright E2E for critical flows. Enforces user-centric queries (no implementation-detail tests) and a coverage gate. Use proactively after any UI or data-layer change, and to reproduce a reported bug with a failing test first.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: sonnet
+model: claude-sonnet-5-5
+effort: medium
 skills:
   - frontend-testing
 ---

@@ -2,7 +2,8 @@
 name: frontend-security-auditor
 description: Use this agent as an independent READ-ONLY client-side security review — XSS sinks (dangerouslySetInnerHTML), CSP, output sanitization (DOMPurify), safe auth-token storage (HttpOnly cookies over localStorage), axios interceptor/CSRF handling, and dependency audit (npm audit). Returns severity-ranked findings; it does not patch. Use proactively after auth/data changes and before release.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-fable-5-1
+effort: high
 memory: project
 skills:
   - frontend-security
